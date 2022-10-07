@@ -1,9 +1,17 @@
 """
 Tests for models.
 """
+from decimal import Decimal
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from psycopg2 import IntegrityError
 
+from core import models
+
+def create_product(**params):
+    """Create and return a new user."""
+    return models.Product.objects.create(**params)
 
 class ModelTests(TestCase):
     """Test models."""
@@ -46,3 +54,13 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_create_product(self):
+        """Test creating a product is successful."""
+        product_details = {
+            'name': 'Test Product',
+            'price': Decimal('2.50'),
+            'rating': 5
+        }
+        product = create_product(**product_details)
+        self.assertEqual(str(product), product.name)
