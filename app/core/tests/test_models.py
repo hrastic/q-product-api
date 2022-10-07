@@ -5,13 +5,14 @@ from decimal import Decimal
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from psycopg2 import IntegrityError
 
 from core import models
+
 
 def create_product(**params):
     """Create and return a new user."""
     return models.Product.objects.create(**params)
+
 
 class ModelTests(TestCase):
     """Test models."""
