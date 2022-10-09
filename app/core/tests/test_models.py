@@ -9,11 +9,6 @@ from django.contrib.auth import get_user_model
 from core import models
 
 
-def create_product(**params):
-    """Create and return a new user."""
-    return models.Product.objects.create(**params)
-
-
 class ModelTests(TestCase):
     """Test models."""
 
@@ -63,5 +58,5 @@ class ModelTests(TestCase):
             'price': Decimal('2.50'),
             'rating': 5
         }
-        product = create_product(**product_details)
+        product = models.Product.objects.create(**product_details)
         self.assertEqual(str(product), product.name)

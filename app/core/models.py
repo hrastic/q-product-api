@@ -50,7 +50,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255, unique=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     rating = models.FloatField()
-    updated_at = models.DateField(null=True)
+    updated_at = models.DateField(null=True, auto_now=True)
 
     def __str__(self) -> str:
         return self.name
