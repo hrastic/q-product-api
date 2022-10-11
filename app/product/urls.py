@@ -13,6 +13,7 @@ from product import views
 
 router = DefaultRouter()
 router.register('products', views.ProductViewSet)
+router.register('ratings', views.RatingViewSet)
 
 app_name = 'product'
 

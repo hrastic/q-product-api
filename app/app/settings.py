@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'user',
     'product',
-    'rating',
 ]
 
 MIDDLEWARE = [

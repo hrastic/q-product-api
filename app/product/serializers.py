@@ -3,7 +3,10 @@ Serializers for product APIs
 """
 from rest_framework import serializers
 
-from core.models import Product
+from core.models import (
+    Product,
+    Rating
+)
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -15,3 +18,12 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'name', 'price', 'rating', 'updated_at']
         read_only_fields = ['id', 'updated_at']
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    """Serializer for ratings."""
+
+    class Meta:
+        model = Rating
+        fields = ['id', 'user', 'product', 'rating']
+        read_only_fields = ['id']
