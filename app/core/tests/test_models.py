@@ -9,6 +9,19 @@ from django.contrib.auth import get_user_model
 from core import models
 
 
+def create_user(email='user@example.com', password='testpass123'):
+    """Create and return a new user."""
+    return get_user_model().objects.create_user(email, password)
+
+
+def create_product(name='Test Product', price=Decimal('2.50'), rating=0):
+    """Create and return a new product."""
+    product = models.Product.objects.create(
+        name=name, price=price, rating=rating
+    )
+    return product
+
+
 class ModelTests(TestCase):
     """Test models."""
 
@@ -60,3 +73,14 @@ class ModelTests(TestCase):
         }
         product = models.Product.objects.create(**product_details)
         self.assertEqual(str(product), product.name)
+
+    def test_create_rating(self):
+        """Test creating a rating is successful."""
+        user = create_user()
+        product = create_product()
+        new_rating = models.Rating.objects.create(
+            user=user,
+            product=product,
+            rating=0
+        )
+        self.assertEqual(str(new_rating), str(user) + ' - ' + str(product))

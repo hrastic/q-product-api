@@ -54,3 +54,20 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Rating(models.Model):
+    """Rating object."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='product_rating'
+    )
+    rating = models.IntegerField()
+
+    def __str__(self) -> str:
+        return str(self.user) + ' - ' + str(self.product)
+
+    class Meta:
+        unique_together = ('user', 'product')
