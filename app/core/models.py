@@ -68,3 +68,6 @@ class Rating(models.Model):
 
     def __str__(self) -> str:
         return str(self.user) + ' - ' + str(self.product)
+
+    class Meta:
+        unique_together = ('user', 'product')
