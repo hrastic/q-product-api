@@ -2,7 +2,6 @@
 Tests for rating APIs.
 """
 from decimal import Decimal
-from venv import create
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -43,6 +42,7 @@ def create_rating(user, product):
         rating=5
     )
     return rating
+
 
 class PublicRatingApiTests(TestCase):
     """Test unauthenticated API requests."""
@@ -88,7 +88,7 @@ class PrivateRatingApiTests(TestCase):
     def test_same_user_twice_unsuccessful(self):
         """Test that user can't rate the same product twice."""
         product = create_product()
-        rating1 = create_rating(self.user, product)
+        create_rating(self.user, product)
         payload = {
             'product': product,
             'user': self.user,
