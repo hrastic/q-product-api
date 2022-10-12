@@ -23,14 +23,17 @@ from product import (
 )
 
 
-class ProductViewSet(viewsets.ModelViewSet):
-    """View for manage product APIs."""
-    serializer_class = serializers.ProductSerializer
+class BasicViewSet(viewsets.ModelViewSet):
     pagination_class = paginations.StandardResultsSetPagination
-    queryset = Product.objects.all().order_by('id')
     filter_backends = [filters.OrderingFilter]
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+
+class ProductViewSet(BasicViewSet):
+    """View for manage product APIs."""
+    serializer_class = serializers.ProductSerializer
+    queryset = Product.objects.all().order_by('id')
 
     @action(detail=True, methods=['get'], url_path='store-average-rating')
     def store_average_rating(self, request, pk=None):
@@ -54,14 +57,10 @@ class ProductViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class RatingViewSet(viewsets.ModelViewSet):
+class RatingViewSet(BasicViewSet):
     """View for manage rating APIs."""
     serializer_class = serializers.RatingSerializer
-    pagination_class = paginations.StandardResultsSetPagination
     queryset = Rating.objects.all().order_by('id')
-    filter_backends = [filters.OrderingFilter]
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
 
     def update(self, request, *args, **kwargs):
         """Return only details for ratings by authenticated user."""
@@ -75,6 +74,19 @@ class RatingViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST)
         else:
             return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """Authenticated users can only delete their ratings."""
+        instance = self.get_object()
+        if instance.user != self.request.user:
+            return Response(
+                {
+                    "non_field_errors":
+                        ["Unable to delete another users' review."]
+                },
+                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return super().destroy(request, *args, **kwargs)
 
     def get_serializer_class(self):
         """Return the serializer class for request."""
