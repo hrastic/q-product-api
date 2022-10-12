@@ -13,6 +13,10 @@ You can run all unit tests by executing from the project root
 ```bash
 docker-compose run --rm app sh -c "python manage.py test"
 ```
+You can check if code follows PEP8 coding style by executing from the project root
+```bash
+docker-compose run --rm app sh -c "flake8"
+```
 # API
 | Endpoint | Description |
 | --- | --- |
